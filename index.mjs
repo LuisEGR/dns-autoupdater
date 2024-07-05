@@ -32,36 +32,44 @@ async function updateRecords() {
   let totalUpdates = 0;
 
   Object.keys(records).forEach(async (domain) => {
-    console.log(domain);
-    let recordsDO =
-      await $`doctl compute domain records list ${domain} -o json`.then(
-        JSON.parse
-      );
-
-    records[domain].forEach(async (r) => {
-      let foundRecord = recordsDO.find(
-        (v) => v.name == r.name && v.type == r.type
-      );
-
-      if (foundRecord && (foundRecord.ttl != r.ttl || foundRecord.data != ip)) {
-        totalUpdates++;
-        console.log(`--- Updating Record ---`);
-        console.log(`  Domain: ${domain}`);
-        console.log(`  Name: ${foundRecord.name}`);
-        console.log(`  TTL: ${foundRecord.ttl} -> ${r.ttl}`);
-        console.log(`  IP: ${foundRecord.data} -> ${ip}\n`);
-        let result = await $`doctl compute domain records update ${domain} \
-      -o json \
-      --record-id ${foundRecord.id} \
-      --record-data ${ip} \
-      --record-ttl ${r.ttl}`;
-        if (result.exitCode != 0) {
-          console.error("Error updating record, ", result);
-        } else {
-          console.log("Update successful");
+    let result =
+      await $`doctl compute domain records list ${domain} -o json`.catch(
+        (e) => {
+          console.error(`Error obtaining records for domain ${domain}: `, e);
         }
-      }
-    });
+      );
+
+    if (result) {
+      console.log(`Updating records: ${domain}`);
+      let recordsDO = JSON.parse(result);
+      records[domain].forEach(async (r) => {
+        let foundRecord = recordsDO.find(
+          (v) => v.name == r.name && v.type == r.type
+        );
+
+        if (
+          foundRecord &&
+          (foundRecord.ttl != r.ttl || foundRecord.data != ip)
+        ) {
+          totalUpdates++;
+          console.log(`--- Updating Record ---`);
+          console.log(`  Domain: ${domain}`);
+          console.log(`  Name: ${foundRecord.name}`);
+          console.log(`  TTL: ${foundRecord.ttl} -> ${r.ttl}`);
+          console.log(`  IP: ${foundRecord.data} -> ${ip}\n`);
+          result = await $`doctl compute domain records update ${domain} \
+        -o json \
+        --record-id ${foundRecord.id} \
+        --record-data ${ip} \
+        --record-ttl ${r.ttl}`;
+          if (result.exitCode != 0) {
+            console.error("Error updating record, ", result);
+          } else {
+            console.log("Update successful");
+          }
+        }
+      });
+    }
 
     console.log(`${totalUpdates} records updated`);
   });
