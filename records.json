@@ -1,0 +1,21 @@
+{
+  "example.com": [
+    {
+      "name": "subdomain1",
+      "type": "A",
+      "ttl": 3600
+    },
+    {
+      "name": "subdomain2",
+      "type": "A",
+      "ttl": 1800
+    }
+  ],
+  "example.net": [
+    {
+      "name": "@",
+      "type": "A",
+      "ttl": 3600
+    }
+  ]
+}

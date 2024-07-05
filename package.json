@@ -1,0 +1,28 @@
+{
+  "name": "dns-ip-autoupdater",
+  "version": "1.0.0",
+  "description": "Update DNS records to always point to the latest host public ipv4",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "zx index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuisEGR/dns-ip-autoupdater.git"
+  },
+  "keywords": [
+    "dns",
+    "update",
+    "digitalocean"
+  ],
+  "author": "LuisEGR",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LuisEGR/dns-ip-autoupdater/issues"
+  },
+  "homepage": "https://github.com/LuisEGR/dns-ip-autoupdater#readme",
+  "dependencies": {
+    "zx": "^8.1.4"
+  }
+}
