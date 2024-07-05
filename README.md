@@ -14,14 +14,17 @@ This script automatically updates DNS records on DigitalOcean with your current 
 
 - A DigitalOcean account with API access
 - Docker
-  or - Node.js (version 12 or higher) - `doctl` command-line tool installed and configured with your DigitalOcean API token
+  or
+  - Node.js (version 12 or higher)
+  - `doctl` command-line tool installed and configured with your DigitalOcean API token
 
 ## Docker
 
 ```
-docker run -e \
-DIGITALOCEAN_TOKEN=<YOUR_TOKEN_HERE> \
-INTERVAL_SECONDS=300 \
+docker run \
+-e DIGITALOCEAN_TOKEN=<YOUR_TOKEN_HERE> \
+-e INTERVAL_SECONDS=300 \
+-v /path/to/records.json:/records.json \
 ghcr.io/luisegr/dns-autoupdater:latest
 ```
 
